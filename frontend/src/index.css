@@ -1,0 +1,64 @@
+@import "@fontsource/poppins/400.css";
+@import "@fontsource/poppins/500.css";
+@import "@fontsource/poppins/600.css";
+@import "@fontsource/poppins/700.css";
+
+:root {
+  --sviet-navy: #0B2545;
+  --sviet-navy-dark: #06172B;
+  --sviet-navy-light: #133E70;
+  --sviet-blue: #1D4ED8;
+  --sviet-gold: #C59B27;
+  --sviet-gold-subtle: #FDF9EE;
+  --sviet-bg: #F8FAFC;
+  --sviet-surface: #FFFFFF;
+  --sviet-border: #E2E8F0;
+  --sviet-text-primary: #0F172A;
+  --sviet-text-secondary: #475569;
+  --sviet-text-muted: #94A3B8;
+
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--sviet-text-primary);
+  background-color: var(--sviet-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--sviet-bg);
+  color: var(--sviet-text-primary);
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Custom scrollbar for clean enterprise look */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}

@@ -1,0 +1,580 @@
+import { useState, useEffect } from "react";
+import {
+  Box,
+  Typography,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  IconButton,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  MenuItem,
+  InputAdornment,
+  Chip,
+  Tooltip,
+  DialogContentText,
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import AddBusinessIcon from "@mui/icons-material/AddBusinessOutlined";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CalendarIcon from "@mui/icons-material/CalendarTodayOutlined";
+import LocationIcon from "@mui/icons-material/LocationOnOutlined";
+import CloseIcon from "@mui/icons-material/Close";
+import { useNavigate } from "react-router-dom";
+import api from "../api/api";
+import Layout from "../components/Layout";
+
+function CompanyList() {
+  const navigate = useNavigate();
+  const [companies, setCompanies] = useState([]);
+  const [search, setSearch] = useState("");
+  const [open, setOpen] = useState(false);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [companyToDelete, setCompanyToDelete] = useState(null);
+  const [selectedCompany, setSelectedCompany] = useState(null);
+
+  const fetchCompanies = async () => {
+    try {
+      const response = await api.get("/companies");
+      const companyData = Array.isArray(response.data)
+        ? response.data
+        : Object.values(response.data || {});
+      setCompanies(companyData);
+    } catch (error) {
+      console.error("Fetch Companies Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCompanies();
+  }, []);
+
+  const deleteCompany = async (id) => {
+    try {
+      await api.delete(`/companies/${id}`);
+      setDeleteConfirmOpen(false);
+      setCompanyToDelete(null);
+      fetchCompanies();
+    } catch (error) {
+      console.error("Delete Company Error:", error);
+      alert("Failed to delete company record.");
+    }
+  };
+
+  const handleEdit = (company) => {
+    setSelectedCompany({ ...company });
+    setOpen(true);
+  };
+
+  const updateCompany = async () => {
+    try {
+      await api.put(`/companies/${selectedCompany.id}`, selectedCompany);
+      setOpen(false);
+      fetchCompanies();
+    } catch (error) {
+      console.error("Update Company Error:", error);
+      alert("Update Failed");
+    }
+  };
+
+  const filteredCompanies = companies.filter(
+    (company) =>
+      company.companyName?.toLowerCase().includes(search.toLowerCase()) ||
+      company.role?.toLowerCase().includes(search.toLowerCase()) ||
+      company.category?.toLowerCase().includes(search.toLowerCase()) ||
+      company.location?.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <Layout
+      title="Corporate Recruiter Directory"
+      subtitle="Recruiting partner companies, campus drive schedules, criteria, and hiring formats"
+    >
+      {/* Top Action Bar */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: 2,
+          mb: 3,
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+          <Chip
+            label={`${filteredCompanies.length} Recruiters Registered`}
+            sx={{
+              bgcolor: "#0B2545",
+              color: "#FFFFFF",
+              fontWeight: 600,
+              fontSize: "0.78rem",
+              borderRadius: "4px",
+            }}
+          />
+        </Box>
+
+        <Button
+          variant="contained"
+          size="small"
+          startIcon={<AddBusinessIcon />}
+          onClick={() => navigate("/companies")}
+          sx={{
+            bgcolor: "#0B2545",
+            "&:hover": { bgcolor: "#133E70" },
+          }}
+        >
+          Add New Recruiter
+        </Button>
+      </Box>
+
+      {/* Filter and Search Bar */}
+      <Paper
+        elevation={0}
+        sx={{
+          p: 2,
+          mb: 3,
+          border: "1px solid #E2E8F0",
+          borderRadius: "8px",
+          bgcolor: "#FFFFFF",
+        }}
+      >
+        <TextField
+          fullWidth
+          size="small"
+          placeholder="Filter recruiters by Company Name, Role, Category, or Location..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon sx={{ color: "#94A3B8", fontSize: 20 }} />
+              </InputAdornment>
+            ),
+            endAdornment: search ? (
+              <InputAdornment position="end">
+                <IconButton size="small" onClick={() => setSearch("")}>
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+              </InputAdornment>
+            ) : null,
+          }}
+        />
+      </Paper>
+
+      {/* Recruiter Table */}
+      <Paper
+        elevation={0}
+        sx={{
+          border: "1px solid #E2E8F0",
+          borderRadius: "8px",
+          bgcolor: "#FFFFFF",
+          overflow: "hidden",
+        }}
+      >
+        <TableContainer sx={{ maxHeight: "calc(100vh - 340px)", overflowX: "auto" }}>
+          <Table stickyHeader size="small" sx={{ minWidth: 960 }}>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ minWidth: 160 }}>Company Name</TableCell>
+                <TableCell sx={{ minWidth: 110 }}>Category</TableCell>
+                <TableCell sx={{ minWidth: 120 }}>CTC Package</TableCell>
+                <TableCell sx={{ minWidth: 140 }}>Designated Role</TableCell>
+                <TableCell sx={{ minWidth: 100 }}>Min CGPA</TableCell>
+                <TableCell sx={{ minWidth: 120 }}>Drive Date</TableCell>
+                <TableCell sx={{ minWidth: 120 }}>Location</TableCell>
+                <TableCell sx={{ minWidth: 130 }}>Allowed Branches</TableCell>
+                <TableCell sx={{ minWidth: 150 }}>Selection Format</TableCell>
+                <TableCell sx={{ minWidth: 110 }}>Drive Status</TableCell>
+                <TableCell align="right" sx={{ minWidth: 90 }}>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+
+            <TableBody>
+              {filteredCompanies.length > 0 ? (
+                filteredCompanies.map((company) => (
+                  <TableRow key={company.id} hover>
+                    <TableCell>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 600, color: "#0B2545" }}>
+                        {company.companyName}
+                      </Typography>
+                    </TableCell>
+
+                    <TableCell>
+                      <Chip
+                        label={company.category || "General"}
+                        size="small"
+                        sx={{
+                          bgcolor: "#F1F5F9",
+                          color: "#334155",
+                          fontWeight: 500,
+                          fontSize: "0.72rem",
+                          borderRadius: "4px",
+                        }}
+                      />
+                    </TableCell>
+
+                    <TableCell>
+                      <Chip
+                        label={company.package ? `₹${company.package} LPA` : "TBA"}
+                        size="small"
+                        sx={{
+                          bgcolor: "#FEF3C7",
+                          color: "#92400E",
+                          border: "1px solid #FDE68A",
+                          fontWeight: 700,
+                          fontSize: "0.75rem",
+                          borderRadius: "4px",
+                        }}
+                      />
+                    </TableCell>
+
+                    <TableCell>
+                      <Typography variant="body2" sx={{ fontWeight: 500, color: "#0F172A" }}>
+                        {company.role || "—"}
+                      </Typography>
+                    </TableCell>
+
+                    <TableCell>
+                      <Typography variant="body2" sx={{ fontWeight: 600, color: "#475569" }}>
+                        {company.minimumCGPA ? `${company.minimumCGPA} CGPA` : "None"}
+                      </Typography>
+                    </TableCell>
+
+                    <TableCell>
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 0.6 }}>
+                        <CalendarIcon sx={{ fontSize: 14, color: "#64748B" }} />
+                        <Typography variant="body2" sx={{ fontSize: "0.8rem", color: "#334155" }}>
+                          {company.driveDate || "TBA"}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+
+                    <TableCell>
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                        <LocationIcon sx={{ fontSize: 14, color: "#94A3B8" }} />
+                        <Typography variant="body2" sx={{ color: "#475569", fontSize: "0.8rem" }}>
+                          {company.location || "On Campus"}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+
+                    <TableCell>
+                      <Typography variant="caption" sx={{ color: "#475569", fontWeight: 500 }}>
+                        {company.allowedBranches || "All Branches"}
+                      </Typography>
+                    </TableCell>
+
+                    <TableCell>
+                      <Typography variant="caption" sx={{ color: "#334155" }}>
+                        {company.selectionProcess || "Direct Interview"}
+                      </Typography>
+                    </TableCell>
+
+                    <TableCell>
+                      {company.status === "Completed" ? (
+                        <Chip
+                          label="Completed"
+                          size="small"
+                          sx={{
+                            bgcolor: "#ECFDF5",
+                            color: "#059669",
+                            border: "1px solid #A7F3D0",
+                            fontWeight: 600,
+                            fontSize: "0.72rem",
+                            borderRadius: "4px",
+                          }}
+                        />
+                      ) : (
+                        <Chip
+                          label="Upcoming"
+                          size="small"
+                          sx={{
+                            bgcolor: "#EFF6FF",
+                            color: "#1D4ED8",
+                            border: "1px solid #BFDBFE",
+                            fontWeight: 600,
+                            fontSize: "0.72rem",
+                            borderRadius: "4px",
+                          }}
+                        />
+                      )}
+                    </TableCell>
+
+                    <TableCell align="right">
+                      <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 0.5 }}>
+                        <Tooltip title="Edit Recruiter Information">
+                          <IconButton
+                            size="small"
+                            onClick={() => handleEdit(company)}
+                            sx={{
+                              color: "#475569",
+                              "&:hover": { color: "#0B2545", bgcolor: "#F1F5F9" },
+                            }}
+                          >
+                            <EditIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+
+                        <Tooltip title="Delete Recruiter">
+                          <IconButton
+                            size="small"
+                            onClick={() => {
+                              setCompanyToDelete(company);
+                              setDeleteConfirmOpen(true);
+                            }}
+                            sx={{
+                              color: "#94A3B8",
+                              "&:hover": { color: "#DC2626", bgcolor: "#FEF2F2" },
+                            }}
+                          >
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={11} align="center" sx={{ py: 6 }}>
+                    <Typography variant="body1" sx={{ color: "#64748B", fontWeight: 500 }}>
+                      No recruiter records found matching "{search}"
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: "#94A3B8", display: "block", mt: 0.5 }}>
+                      Schedule a new campus placement drive or adjust search terms.
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
+
+      {/* Edit Company Dialog */}
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        fullWidth
+        maxWidth="md"
+      >
+        <DialogTitle>
+          <Typography variant="h6" sx={{ fontWeight: 600, color: "#0F172A" }}>
+            Edit Corporate Recruiter Details
+          </Typography>
+          <Typography variant="caption" sx={{ color: "#64748B" }}>
+            Update drive information, eligibility criteria, and hiring dates
+          </Typography>
+        </DialogTitle>
+
+        <DialogContent sx={{ pt: 2.5 }}>
+          {selectedCompany && (
+            <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" }, gap: 2, mt: 1 }}>
+              <Box>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.5 }}>
+                  Company Name
+                </Typography>
+                <TextField
+                  fullWidth
+                  size="small"
+                  value={selectedCompany.companyName || ""}
+                  onChange={(e) =>
+                    setSelectedCompany({
+                      ...selectedCompany,
+                      companyName: e.target.value,
+                    })
+                  }
+                />
+              </Box>
+
+              <Box>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.5 }}>
+                  Annual Package (LPA)
+                </Typography>
+                <TextField
+                  fullWidth
+                  size="small"
+                  value={selectedCompany.package || ""}
+                  onChange={(e) =>
+                    setSelectedCompany({
+                      ...selectedCompany,
+                      package: e.target.value,
+                    })
+                  }
+                />
+              </Box>
+
+              <Box>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.5 }}>
+                  Designated Job Role
+                </Typography>
+                <TextField
+                  fullWidth
+                  size="small"
+                  value={selectedCompany.role || ""}
+                  onChange={(e) =>
+                    setSelectedCompany({
+                      ...selectedCompany,
+                      role: e.target.value,
+                    })
+                  }
+                />
+              </Box>
+
+              <Box>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.5 }}>
+                  Minimum Cutoff CGPA
+                </Typography>
+                <TextField
+                  fullWidth
+                  size="small"
+                  value={selectedCompany.minimumCGPA || ""}
+                  onChange={(e) =>
+                    setSelectedCompany({
+                      ...selectedCompany,
+                      minimumCGPA: e.target.value,
+                    })
+                  }
+                />
+              </Box>
+
+              <Box>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.5 }}>
+                  Job / Drive Location
+                </Typography>
+                <TextField
+                  fullWidth
+                  size="small"
+                  value={selectedCompany.location || ""}
+                  onChange={(e) =>
+                    setSelectedCompany({
+                      ...selectedCompany,
+                      location: e.target.value,
+                    })
+                  }
+                />
+              </Box>
+
+              <Box>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.5 }}>
+                  Allowed Branches
+                </Typography>
+                <TextField
+                  fullWidth
+                  size="small"
+                  value={selectedCompany.allowedBranches || ""}
+                  onChange={(e) =>
+                    setSelectedCompany({
+                      ...selectedCompany,
+                      allowedBranches: e.target.value,
+                    })
+                  }
+                />
+              </Box>
+
+              <Box>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.5 }}>
+                  Selection Process
+                </Typography>
+                <TextField
+                  select
+                  fullWidth
+                  size="small"
+                  value={selectedCompany.selectionProcess || "Aptitude + Interview"}
+                  onChange={(e) =>
+                    setSelectedCompany({
+                      ...selectedCompany,
+                      selectionProcess: e.target.value,
+                    })
+                  }
+                >
+                  <MenuItem value="Aptitude + Interview">Aptitude + Interview</MenuItem>
+                  <MenuItem value="Technical + HR">Technical + HR</MenuItem>
+                  <MenuItem value="Coding + Interview">Coding + Interview</MenuItem>
+                  <MenuItem value="Direct Interview">Direct Interview</MenuItem>
+                </TextField>
+              </Box>
+
+              <Box>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.5 }}>
+                  Drive Status
+                </Typography>
+                <TextField
+                  select
+                  fullWidth
+                  size="small"
+                  value={selectedCompany.status || "Upcoming"}
+                  onChange={(e) =>
+                    setSelectedCompany({
+                      ...selectedCompany,
+                      status: e.target.value,
+                    })
+                  }
+                >
+                  <MenuItem value="Upcoming">Upcoming</MenuItem>
+                  <MenuItem value="Completed">Completed</MenuItem>
+                </TextField>
+              </Box>
+            </Box>
+          )}
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={() => setOpen(false)} sx={{ color: "#64748B" }}>
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            onClick={updateCompany}
+            sx={{
+              bgcolor: "#0B2545",
+              "&:hover": { bgcolor: "#133E70" },
+            }}
+          >
+            Update Recruiter
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={deleteConfirmOpen}
+        onClose={() => setDeleteConfirmOpen(false)}
+        maxWidth="xs"
+        fullWidth
+      >
+        <DialogTitle>Confirm Recruiter Deletion</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ color: "#475569", fontSize: "0.875rem" }}>
+            Are you sure you want to permanently delete recruiter record for{" "}
+            <b>{companyToDelete?.companyName}</b>? This will remove associated drive listings.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteConfirmOpen(false)} sx={{ color: "#64748B" }}>
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => deleteCompany(companyToDelete?.id)}
+          >
+            Delete Recruiter
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Layout>
+  );
+}
+
+export default CompanyList;

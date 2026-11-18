@@ -1,0 +1,12 @@
+node_modules/
+**/node_modules/
+.env
+.env.*
+!.env.example
+firebase_key.json
+**/firebase_key.json
+__pycache__/
+**/__pycache__/
+*.py[cod]
+venv/
+**/venv/

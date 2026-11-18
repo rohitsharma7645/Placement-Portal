@@ -1,0 +1,30 @@
+/* SVIET Enterprise Portal Global Styles */
+
+.portal-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--sviet-bg);
+}
+
+.portal-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background-color: var(--sviet-bg);
+}
+
+.portal-content {
+  flex: 1;
+  padding: 28px 32px;
+  max-width: 1600px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .portal-content {
+    padding: 20px 16px;
+  }
+}
