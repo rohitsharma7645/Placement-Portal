@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   Box,
   Typography,
@@ -7,17 +7,11 @@ import {
   Button,
   Chip,
   Avatar,
-  Divider,
   CircularProgress,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SchoolIcon from "@mui/icons-material/SchoolOutlined";
 import BusinessIcon from "@mui/icons-material/BusinessOutlined";
-import EmailIcon from "@mui/icons-material/EmailOutlined";
-import PhoneIcon from "@mui/icons-material/PhoneOutlined";
-import RollIcon from "@mui/icons-material/BadgeOutlined";
-import PackageIcon from "@mui/icons-material/WorkspacePremiumOutlined";
-import CgpaIcon from "@mui/icons-material/GradeOutlined";
 import PrintIcon from "@mui/icons-material/PrintOutlined";
 import PlacedIcon from "@mui/icons-material/CheckCircle";
 import NotPlacedIcon from "@mui/icons-material/Cancel";
@@ -31,11 +25,7 @@ function StudentProfile() {
   const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchStudent();
-  }, [id]);
-
-  const fetchStudent = async () => {
+  const fetchStudent = useCallback(async () => {
     setLoading(true);
     try {
       const response = await api.get("/students");
@@ -53,7 +43,11 @@ function StudentProfile() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    fetchStudent();
+  }, [fetchStudent]);
 
   if (loading) {
     return (
@@ -144,11 +138,11 @@ function StudentProfile() {
         <Paper
           elevation={0}
           sx={{
-            p: { xs: 3, sm: 4 },
+            p: { xs: 2, sm: 2.5 },
             border: "1px solid #E2E8F0",
             borderRadius: "8px",
             bgcolor: "#FFFFFF",
-            mb: 3,
+            mb: 2.5,
           }}
         >
           <Box
@@ -157,33 +151,33 @@ function StudentProfile() {
               flexDirection: { xs: "column", sm: "row" },
               alignItems: { xs: "flex-start", sm: "center" },
               justifyContent: "space-between",
-              gap: 3,
+              gap: 2,
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2.5 }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
               <Avatar
                 sx={{
-                  width: 68,
-                  height: 68,
+                  width: 52,
+                  height: 52,
                   bgcolor: "#0B2545",
                   color: "#FFFFFF",
-                  fontSize: "1.75rem",
+                  fontSize: "1.4rem",
                   fontWeight: 700,
-                  borderRadius: "8px",
-                  border: "2px solid #E2E8F0",
+                  borderRadius: "6px",
+                  border: "1px solid #E2E8F0",
                 }}
               >
                 {student.name ? student.name.charAt(0).toUpperCase() : "S"}
               </Avatar>
 
               <Box>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, flexWrap: "wrap" }}>
-                  <Typography variant="h4" sx={{ fontWeight: 700, color: "#0F172A" }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.2, flexWrap: "wrap" }}>
+                  <Typography variant="h5" sx={{ fontWeight: 700, color: "#0F172A", lineHeight: 1.2 }}>
                     {student.name}
                   </Typography>
                   {isPlaced ? (
                     <Chip
-                      icon={<PlacedIcon sx={{ fontSize: "14px !important", color: "#059669 !important" }} />}
+                      icon={<PlacedIcon sx={{ fontSize: "13px !important", color: "#059669 !important" }} />}
                       label="Placed"
                       size="small"
                       sx={{
@@ -191,12 +185,13 @@ function StudentProfile() {
                         color: "#059669",
                         border: "1px solid #A7F3D0",
                         fontWeight: 600,
-                        fontSize: "0.75rem",
+                        fontSize: "0.72rem",
+                        height: 22,
                       }}
                     />
                   ) : (
                     <Chip
-                      icon={<NotPlacedIcon sx={{ fontSize: "14px !important", color: "#64748B !important" }} />}
+                      icon={<NotPlacedIcon sx={{ fontSize: "13px !important", color: "#64748B !important" }} />}
                       label="Not Placed"
                       size="small"
                       sx={{
@@ -204,13 +199,14 @@ function StudentProfile() {
                         color: "#64748B",
                         border: "1px solid #E2E8F0",
                         fontWeight: 500,
-                        fontSize: "0.75rem",
+                        fontSize: "0.72rem",
+                        height: 22,
                       }}
                     />
                   )}
                 </Box>
 
-                <Typography variant="body2" sx={{ color: "#64748B", mt: 0.5 }}>
+                <Typography variant="body2" sx={{ color: "#64748B", mt: 0.3, fontSize: "0.82rem" }}>
                   Roll No: <b>{student.rollNo || "N/A"}</b> &nbsp;|&nbsp; Branch: <b>{student.branch || "General"}</b>
                 </Typography>
               </Box>
@@ -220,21 +216,21 @@ function StudentProfile() {
             {isPlaced && (
               <Box
                 sx={{
-                  px: 2.5,
-                  py: 1.5,
+                  px: 2,
+                  py: 1,
                   bgcolor: "#F8FAFC",
                   border: "1px solid #E2E8F0",
                   borderRadius: "6px",
                   textAlign: { xs: "left", sm: "right" },
                 }}
               >
-                <Typography variant="caption" sx={{ color: "#64748B", fontWeight: 600 }}>
+                <Typography variant="caption" sx={{ color: "#64748B", fontWeight: 600, fontSize: "0.72rem" }}>
                   Secured Annual CTC
                 </Typography>
-                <Typography variant="h5" sx={{ fontWeight: 700, color: "#0B2545" }}>
+                <Typography variant="h6" sx={{ fontWeight: 700, color: "#0B2545", lineHeight: 1.2 }}>
                   ₹{student.package || 0} LPA
                 </Typography>
-                <Typography variant="caption" sx={{ color: "#059669", fontWeight: 600 }}>
+                <Typography variant="caption" sx={{ color: "#059669", fontWeight: 600, fontSize: "0.72rem" }}>
                   {student.companyName || "Recruiter Offer"}
                 </Typography>
               </Box>
@@ -243,60 +239,60 @@ function StudentProfile() {
         </Paper>
 
         {/* Detailed Breakdown Grid */}
-        <Grid container spacing={3}>
+        <Grid container spacing={2.5}>
           {/* Card 1: Academic & Contact Profile */}
           <Grid item xs={12} md={6}>
             <Paper
               elevation={0}
               sx={{
-                p: 3,
+                p: 2.5,
                 border: "1px solid #E2E8F0",
                 borderRadius: "8px",
                 bgcolor: "#FFFFFF",
                 height: "100%",
               }}
             >
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1.2, mb: 2.5 }}>
-                <SchoolIcon sx={{ color: "#0B2545", fontSize: 20 }} />
-                <Typography variant="h6" sx={{ fontWeight: 600, color: "#0F172A" }}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
+                <SchoolIcon sx={{ color: "#0B2545", fontSize: 18 }} />
+                <Typography variant="subtitle1" sx={{ fontWeight: 600, color: "#0F172A", lineHeight: 1.2 }}>
                   Academic & Personal Credentials
                 </Typography>
               </Box>
 
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                <Box sx={{ display: "flex", justifyContent: "space-between", py: 1, borderBottom: "1px solid #F1F5F9" }}>
-                  <Typography variant="body2" sx={{ color: "#64748B" }}>Candidate Full Name</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 600, color: "#0F172A" }}>{student.name || "—"}</Typography>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1.2 }}>
+                <Box sx={{ display: "flex", justifyContent: "space-between", py: 0.8, borderBottom: "1px solid #F1F5F9" }}>
+                  <Typography variant="body2" sx={{ color: "#64748B", fontSize: "0.82rem" }}>Candidate Full Name</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: "#0F172A", fontSize: "0.82rem" }}>{student.name || "—"}</Typography>
                 </Box>
 
-                <Box sx={{ display: "flex", justifyContent: "space-between", py: 1, borderBottom: "1px solid #F1F5F9" }}>
-                  <Typography variant="body2" sx={{ color: "#64748B" }}>University Roll Number</Typography>
-                  <Typography variant="body2" sx={{ fontFamily: "monospace", fontWeight: 600, color: "#0F172A" }}>{student.rollNo || "—"}</Typography>
+                <Box sx={{ display: "flex", justifyContent: "space-between", py: 0.8, borderBottom: "1px solid #F1F5F9" }}>
+                  <Typography variant="body2" sx={{ color: "#64748B", fontSize: "0.82rem" }}>University Roll Number</Typography>
+                  <Typography variant="body2" sx={{ fontFamily: "monospace", fontWeight: 600, color: "#0F172A", fontSize: "0.82rem" }}>{student.rollNo || "—"}</Typography>
                 </Box>
 
-                <Box sx={{ display: "flex", justifyContent: "space-between", py: 1, borderBottom: "1px solid #F1F5F9" }}>
-                  <Typography variant="body2" sx={{ color: "#64748B" }}>Department / Branch</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 600, color: "#0F172A" }}>{student.branch || "—"}</Typography>
+                <Box sx={{ display: "flex", justifyContent: "space-between", py: 0.8, borderBottom: "1px solid #F1F5F9" }}>
+                  <Typography variant="body2" sx={{ color: "#64748B", fontSize: "0.82rem" }}>Department / Branch</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: "#0F172A", fontSize: "0.82rem" }}>{student.branch || "—"}</Typography>
                 </Box>
 
-                <Box sx={{ display: "flex", justifyContent: "space-between", py: 1, borderBottom: "1px solid #F1F5F9" }}>
-                  <Typography variant="body2" sx={{ color: "#64748B" }}>Cumulative CGPA</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 700, color: "#0B2545" }}>{student.cgpa || "—"}</Typography>
+                <Box sx={{ display: "flex", justifyContent: "space-between", py: 0.8, borderBottom: "1px solid #F1F5F9" }}>
+                  <Typography variant="body2" sx={{ color: "#64748B", fontSize: "0.82rem" }}>Cumulative CGPA</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 700, color: "#0B2545", fontSize: "0.82rem" }}>{student.cgpa || "—"}</Typography>
                 </Box>
 
-                <Box sx={{ display: "flex", justifyContent: "space-between", py: 1, borderBottom: "1px solid #F1F5F9" }}>
-                  <Typography variant="body2" sx={{ color: "#64748B" }}>Institutional Email</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 500, color: "#1D4ED8" }}>{student.email || "—"}</Typography>
+                <Box sx={{ display: "flex", justifyContent: "space-between", py: 0.8, borderBottom: "1px solid #F1F5F9" }}>
+                  <Typography variant="body2" sx={{ color: "#64748B", fontSize: "0.82rem" }}>Institutional Email</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 500, color: "#1D4ED8", fontSize: "0.82rem" }}>{student.email || "—"}</Typography>
                 </Box>
 
-                <Box sx={{ display: "flex", justifyContent: "space-between", py: 1, borderBottom: "1px solid #F1F5F9" }}>
-                  <Typography variant="body2" sx={{ color: "#64748B" }}>Contact Phone</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 500, color: "#0F172A" }}>{student.phone || "—"}</Typography>
+                <Box sx={{ display: "flex", justifyContent: "space-between", py: 0.8, borderBottom: "1px solid #F1F5F9" }}>
+                  <Typography variant="body2" sx={{ color: "#64748B", fontSize: "0.82rem" }}>Contact Phone</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 500, color: "#0F172A", fontSize: "0.82rem" }}>{student.phone || "—"}</Typography>
                 </Box>
 
-                <Box sx={{ display: "flex", justifyContent: "space-between", py: 1 }}>
-                  <Typography variant="body2" sx={{ color: "#64748B" }}>Passout Year</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 600, color: "#0F172A" }}>{student.passoutYear || "—"}</Typography>
+                <Box sx={{ display: "flex", justifyContent: "space-between", py: 0.8 }}>
+                  <Typography variant="body2" sx={{ color: "#64748B", fontSize: "0.82rem" }}>Passout Year</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: "#0F172A", fontSize: "0.82rem" }}>{student.passoutYear || "—"}</Typography>
                 </Box>
               </Box>
             </Paper>
@@ -307,23 +303,23 @@ function StudentProfile() {
             <Paper
               elevation={0}
               sx={{
-                p: 3,
+                p: 2.5,
                 border: "1px solid #E2E8F0",
                 borderRadius: "8px",
                 bgcolor: "#FFFFFF",
                 height: "100%",
               }}
             >
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1.2, mb: 2.5 }}>
-                <BusinessIcon sx={{ color: "#0B2545", fontSize: 20 }} />
-                <Typography variant="h6" sx={{ fontWeight: 600, color: "#0F172A" }}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
+                <BusinessIcon sx={{ color: "#0B2545", fontSize: 18 }} />
+                <Typography variant="subtitle1" sx={{ fontWeight: 600, color: "#0F172A", lineHeight: 1.2 }}>
                   Placement & Recruiter Record
                 </Typography>
               </Box>
 
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                <Box sx={{ display: "flex", justifyContent: "space-between", py: 1, borderBottom: "1px solid #F1F5F9" }}>
-                  <Typography variant="body2" sx={{ color: "#64748B" }}>Placement Status</Typography>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1.2 }}>
+                <Box sx={{ display: "flex", justifyContent: "space-between", py: 0.8, borderBottom: "1px solid #F1F5F9" }}>
+                  <Typography variant="body2" sx={{ color: "#64748B", fontSize: "0.82rem" }}>Placement Status</Typography>
                   <Chip
                     label={student.status || "Not Placed"}
                     size="small"
@@ -332,43 +328,44 @@ function StudentProfile() {
                       color: isPlaced ? "#059669" : "#64748B",
                       border: `1px solid ${isPlaced ? "#A7F3D0" : "#E2E8F0"}`,
                       fontWeight: 600,
-                      fontSize: "0.75rem",
+                      fontSize: "0.72rem",
+                      height: 20,
                     }}
                   />
                 </Box>
 
-                <Box sx={{ display: "flex", justifyContent: "space-between", py: 1, borderBottom: "1px solid #F1F5F9" }}>
-                  <Typography variant="body2" sx={{ color: "#64748B" }}>Recruiter Company</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 600, color: "#0B2545" }}>{student.companyName || "N/A"}</Typography>
+                <Box sx={{ display: "flex", justifyContent: "space-between", py: 0.8, borderBottom: "1px solid #F1F5F9" }}>
+                  <Typography variant="body2" sx={{ color: "#64748B", fontSize: "0.82rem" }}>Recruiter Company</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: "#0B2545", fontSize: "0.82rem" }}>{student.companyName || "N/A"}</Typography>
                 </Box>
 
-                <Box sx={{ display: "flex", justifyContent: "space-between", py: 1, borderBottom: "1px solid #F1F5F9" }}>
-                  <Typography variant="body2" sx={{ color: "#64748B" }}>Annual Package (LPA)</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 700, color: isPlaced ? "#059669" : "#64748B" }}>
+                <Box sx={{ display: "flex", justifyContent: "space-between", py: 0.8, borderBottom: "1px solid #F1F5F9" }}>
+                  <Typography variant="body2" sx={{ color: "#64748B", fontSize: "0.82rem" }}>Annual Package (LPA)</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 700, color: isPlaced ? "#059669" : "#64748B", fontSize: "0.82rem" }}>
                     {student.package ? `₹${student.package} LPA` : "N/A"}
                   </Typography>
                 </Box>
 
-                <Box sx={{ display: "flex", justifyContent: "space-between", py: 1, borderBottom: "1px solid #F1F5F9" }}>
-                  <Typography variant="body2" sx={{ color: "#64748B" }}>Designated Role</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 500, color: "#0F172A" }}>{student.role || "N/A"}</Typography>
+                <Box sx={{ display: "flex", justifyContent: "space-between", py: 0.8, borderBottom: "1px solid #F1F5F9" }}>
+                  <Typography variant="body2" sx={{ color: "#64748B", fontSize: "0.82rem" }}>Designated Role</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 500, color: "#0F172A", fontSize: "0.82rem" }}>{student.role || "N/A"}</Typography>
                 </Box>
 
-                <Box sx={{ display: "flex", justifyContent: "space-between", py: 1, borderBottom: "1px solid #F1F5F9" }}>
-                  <Typography variant="body2" sx={{ color: "#64748B" }}>Company Category</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 500, color: "#334155" }}>{student.companyCategory || "N/A"}</Typography>
+                <Box sx={{ display: "flex", justifyContent: "space-between", py: 0.8, borderBottom: "1px solid #F1F5F9" }}>
+                  <Typography variant="body2" sx={{ color: "#64748B", fontSize: "0.82rem" }}>Company Category</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 500, color: "#334155", fontSize: "0.82rem" }}>{student.companyCategory || "N/A"}</Typography>
                 </Box>
 
-                <Box sx={{ display: "flex", justifyContent: "space-between", py: 1, borderBottom: "1px solid #F1F5F9" }}>
-                  <Typography variant="body2" sx={{ color: "#64748B" }}>Recruiter Tier Rating</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 600, color: "#D97706" }}>
+                <Box sx={{ display: "flex", justifyContent: "space-between", py: 0.8, borderBottom: "1px solid #F1F5F9" }}>
+                  <Typography variant="body2" sx={{ color: "#64748B", fontSize: "0.82rem" }}>Recruiter Tier Rating</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: "#D97706", fontSize: "0.82rem" }}>
                     {student.companyRating ? `${student.companyRating} Stars` : "N/A"}
                   </Typography>
                 </Box>
 
-                <Box sx={{ display: "flex", justifyContent: "space-between", py: 1 }}>
-                  <Typography variant="body2" sx={{ color: "#64748B" }}>Offer / Placement Date</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 500, color: "#0F172A" }}>{student.placementDate || "N/A"}</Typography>
+                <Box sx={{ display: "flex", justifyContent: "space-between", py: 0.8 }}>
+                  <Typography variant="body2" sx={{ color: "#64748B", fontSize: "0.82rem" }}>Offer / Placement Date</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 500, color: "#0F172A", fontSize: "0.82rem" }}>{student.placementDate || "N/A"}</Typography>
                 </Box>
               </Box>
             </Paper>

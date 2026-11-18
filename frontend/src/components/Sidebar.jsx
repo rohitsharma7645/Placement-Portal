@@ -161,11 +161,11 @@ function Sidebar() {
             px: 1.5,
             py: 0.5,
             display: "block",
-            fontSize: "0.68rem",
-            fontWeight: 600,
+            fontSize: "0.7rem",
+            fontWeight: 700,
             letterSpacing: "0.08em",
             textTransform: "uppercase",
-            color: "rgba(255, 255, 255, 0.45)",
+            color: "#94A3B8",
           }}
         >
           Navigation
@@ -182,19 +182,28 @@ function Sidebar() {
                     borderRadius: "6px",
                     px: 1.5,
                     py: 1,
-                    bgcolor: isActive ? "rgba(255, 255, 255, 0.12)" : "transparent",
-                    color: isActive ? "#FFFFFF" : "rgba(255, 255, 255, 0.75)",
+                    bgcolor: isActive ? "rgba(255, 255, 255, 0.14)" : "transparent",
                     borderLeft: isActive ? "3px solid #C59B27" : "3px solid transparent",
+                    transition: "background-color 0.15s ease",
+                    "& .MuiListItemText-primary": {
+                      color: isActive ? "#FFFFFF" : "#E2E8F0",
+                      fontWeight: isActive ? 600 : 500,
+                    },
                     "&:hover": {
-                      bgcolor: "rgba(255, 255, 255, 0.08)",
-                      color: "#FFFFFF",
+                      bgcolor: "rgba(255, 255, 255, 0.1)",
+                      "& .MuiListItemText-primary": {
+                        color: "#FFFFFF",
+                      },
+                      "& .MuiListItemIcon-root": {
+                        color: "#FFFFFF",
+                      },
                     },
                   }}
                 >
                   <ListItemIcon
                     sx={{
                       minWidth: 32,
-                      color: isActive ? "#C59B27" : "rgba(255, 255, 255, 0.65)",
+                      color: isActive ? "#C59B27" : "#CBD5E1",
                     }}
                   >
                     {item.icon}
@@ -202,8 +211,8 @@ function Sidebar() {
                   <ListItemText
                     primary={item.title}
                     primaryTypographyProps={{
-                      fontSize: "0.84rem",
-                      fontWeight: isActive ? 600 : 500,
+                      fontSize: "0.85rem",
+                      sx: { color: isActive ? "#FFFFFF" : "#E2E8F0" },
                     }}
                   />
                 </ListItemButton>
@@ -217,8 +226,8 @@ function Sidebar() {
       <Box
         sx={{
           p: 2,
-          borderTop: "1px solid rgba(255, 255, 255, 0.08)",
-          bgcolor: "rgba(0, 0, 0, 0.12)",
+          borderTop: "1px solid rgba(255, 255, 255, 0.1)",
+          bgcolor: "rgba(0, 0, 0, 0.2)",
         }}
       >
         <Box
@@ -237,7 +246,7 @@ function Sidebar() {
                 color: "#FFFFFF",
                 fontSize: "0.8rem",
                 fontWeight: 600,
-                border: "1px solid rgba(255, 255, 255, 0.15)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
               }}
             >
               TP
@@ -246,8 +255,8 @@ function Sidebar() {
               <Typography
                 variant="subtitle2"
                 sx={{
-                  color: "#FFFFFF",
-                  fontSize: "0.8rem",
+                  color: "#FFFFFF !important",
+                  fontSize: "0.82rem",
                   fontWeight: 600,
                   lineHeight: 1.2,
                   whiteSpace: "nowrap",
@@ -260,8 +269,8 @@ function Sidebar() {
               <Typography
                 variant="caption"
                 sx={{
-                  color: "rgba(255, 255, 255, 0.55)",
-                  fontSize: "0.7rem",
+                  color: "#94A3B8 !important",
+                  fontSize: "0.72rem",
                   display: "block",
                 }}
               >
@@ -275,7 +284,7 @@ function Sidebar() {
               onClick={handleLogout}
               size="small"
               sx={{
-                color: "rgba(255, 255, 255, 0.65)",
+                color: "#CBD5E1",
                 "&:hover": {
                   color: "#EF4444",
                   bgcolor: "rgba(239, 68, 68, 0.12)",

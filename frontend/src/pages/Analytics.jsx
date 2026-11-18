@@ -38,10 +38,6 @@ function Analytics() {
     },
   });
 
-  useEffect(() => {
-    fetchAnalytics();
-  }, []);
-
   const fetchAnalytics = async () => {
     try {
       const response = await api.get("/students");
@@ -135,30 +131,34 @@ function Analytics() {
     }
   };
 
+  useEffect(() => {
+    fetchAnalytics();
+  }, []);
+
   const statCards = [
     {
       title: "Placement Rate",
       value: `${analytics.placementRate}%`,
       subtitle: `${analytics.placedStudents} of ${analytics.totalStudents} placed`,
-      icon: <RateIcon sx={{ color: "#059669" }} />,
+      icon: <RateIcon sx={{ color: "#059669", fontSize: 20 }} />,
     },
     {
       title: "Average Annual Package",
       value: `₹${analytics.averagePackage} LPA`,
       subtitle: "Across placed cohort",
-      icon: <PackageIcon sx={{ color: "#0B2545" }} />,
+      icon: <PackageIcon sx={{ color: "#0B2545", fontSize: 20 }} />,
     },
     {
       title: "Highest Annual CTC",
       value: `₹${analytics.highestPackage} LPA`,
       subtitle: "Campus record benchmark",
-      icon: <TopIcon sx={{ color: "#C59B27" }} />,
+      icon: <TopIcon sx={{ color: "#C59B27", fontSize: 20 }} />,
     },
     {
       title: "Primary Recruiter",
       value: analytics.topCompany,
       subtitle: "Leading offer contributor",
-      icon: <RecruiterIcon sx={{ color: "#1D4ED8" }} />,
+      icon: <RecruiterIcon sx={{ color: "#1D4ED8", fontSize: 20 }} />,
     },
   ];
 
@@ -167,30 +167,31 @@ function Analytics() {
       title="Placement Analytics"
       subtitle="Statistical intelligence, departmental outcomes, package benchmarks, and corporate recruiter shares"
     >
-      {/* 4 Top KPI Cards */}
-      <Grid container spacing={2.5} sx={{ mb: 3.5 }}>
+      {/* 4 Top KPI Cards: Tightly Arranged */}
+      <Grid container spacing={2} sx={{ mb: 2.5 }}>
         {statCards.map((card, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
             <Paper
               elevation={0}
               sx={{
-                p: 2.5,
+                p: 2,
                 bgcolor: "#FFFFFF",
                 border: "1px solid #E2E8F0",
                 borderRadius: "8px",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                minHeight: 120,
+                minHeight: 104,
               }}
             >
-              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 1 }}>
-                <Typography variant="caption" sx={{ color: "#64748B", fontWeight: 600 }}>
+              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 0.5 }}>
+                <Typography variant="caption" sx={{ color: "#64748B", fontWeight: 600, fontSize: "0.75rem" }}>
                   {card.title}
                 </Typography>
                 <Box
                   sx={{
-                    p: 0.8,
+                    width: 30,
+                    height: 30,
                     borderRadius: "6px",
                     bgcolor: "#F8FAFC",
                     border: "1px solid #F1F5F9",
@@ -204,10 +205,10 @@ function Analytics() {
               </Box>
 
               <Box>
-                <Typography variant="h4" sx={{ fontWeight: 700, color: "#0F172A", fontSize: "1.6rem" }}>
+                <Typography variant="h4" sx={{ fontWeight: 700, color: "#0F172A", fontSize: "1.5rem", lineHeight: 1.2 }}>
                   {card.value}
                 </Typography>
-                <Typography variant="caption" sx={{ color: "#64748B", display: "block", mt: 0.4 }}>
+                <Typography variant="caption" sx={{ color: "#64748B", display: "block", mt: 0.3, fontSize: "0.72rem" }}>
                   {card.subtitle}
                 </Typography>
               </Box>
@@ -217,7 +218,7 @@ function Analytics() {
       </Grid>
 
       {/* Analytics Main Breakdown */}
-      <Grid container spacing={3}>
+      <Grid container spacing={2.5}>
         {/* Branch-wise Performance Table */}
         <Grid item xs={12} lg={7}>
           <Paper
@@ -229,10 +230,10 @@ function Analytics() {
               overflow: "hidden",
             }}
           >
-            <Box sx={{ p: 2.5, borderBottom: "1px solid #E2E8F0" }}>
+            <Box sx={{ p: 2, borderBottom: "1px solid #E2E8F0" }}>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <BranchIcon sx={{ color: "#0B2545", fontSize: 20 }} />
-                <Typography variant="h6" sx={{ fontWeight: 600, color: "#0F172A" }}>
+                <BranchIcon sx={{ color: "#0B2545", fontSize: 18 }} />
+                <Typography variant="subtitle1" sx={{ fontWeight: 600, color: "#0F172A", lineHeight: 1.2 }}>
                   Departmental Placement Distribution
                 </Typography>
               </Box>
@@ -248,7 +249,7 @@ function Analytics() {
                     <TableCell>Engineering Department</TableCell>
                     <TableCell align="center">Enrolled</TableCell>
                     <TableCell align="center">Placed</TableCell>
-                    <TableCell sx={{ minWidth: 160 }}>Placement Rate</TableCell>
+                    <TableCell sx={{ minWidth: 150 }}>Placement Rate</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -256,12 +257,12 @@ function Analytics() {
                     analytics.branchStats.map((b, idx) => (
                       <TableRow key={idx} hover>
                         <TableCell>
-                          <Typography variant="body2" sx={{ fontWeight: 600, color: "#0B2545" }}>
+                          <Typography variant="body2" sx={{ fontWeight: 600, color: "#0B2545", fontSize: "0.82rem" }}>
                             {b.branch}
                           </Typography>
                         </TableCell>
                         <TableCell align="center">
-                          <Typography variant="body2" sx={{ color: "#475569" }}>
+                          <Typography variant="body2" sx={{ color: "#475569", fontSize: "0.82rem" }}>
                             {b.total}
                           </Typography>
                         </TableCell>
@@ -273,14 +274,14 @@ function Analytics() {
                               bgcolor: "#ECFDF5",
                               color: "#059669",
                               fontWeight: 600,
-                              height: 22,
-                              fontSize: "0.75rem",
+                              height: 20,
+                              fontSize: "0.72rem",
                             }}
                           />
                         </TableCell>
                         <TableCell>
-                          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                            <Box sx={{ width: "100%", mr: 1 }}>
+                          <Box sx={{ display: "flex", alignItems: "center", gap: 1.2 }}>
+                            <Box sx={{ width: "100%", mr: 0.5 }}>
                               <LinearProgress
                                 variant="determinate"
                                 value={Number(b.rate)}
@@ -295,7 +296,7 @@ function Analytics() {
                                 }}
                               />
                             </Box>
-                            <Typography variant="caption" sx={{ fontWeight: 600, minWidth: 38 }}>
+                            <Typography variant="caption" sx={{ fontWeight: 600, minWidth: 36, fontSize: "0.72rem" }}>
                               {b.rate}%
                             </Typography>
                           </Box>
@@ -304,8 +305,8 @@ function Analytics() {
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={4} align="center" sx={{ py: 4 }}>
-                        <Typography variant="body2" sx={{ color: "#64748B" }}>
+                      <TableCell colSpan={4} align="center" sx={{ py: 3 }}>
+                        <Typography variant="body2" sx={{ color: "#64748B", fontSize: "0.82rem" }}>
                           No departmental student data available.
                         </Typography>
                       </TableCell>
@@ -323,49 +324,49 @@ function Analytics() {
           <Paper
             elevation={0}
             sx={{
-              p: 2.5,
+              p: 2,
               border: "1px solid #E2E8F0",
               borderRadius: "8px",
               bgcolor: "#FFFFFF",
-              mb: 3,
+              mb: 2.5,
             }}
           >
-            <Typography variant="h6" sx={{ fontWeight: 600, color: "#0F172A", mb: 0.5 }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 600, color: "#0F172A", lineHeight: 1.2 }}>
               Corporate Hiring Share
             </Typography>
-            <Typography variant="caption" sx={{ color: "#64748B", display: "block", mb: 2 }}>
+            <Typography variant="caption" sx={{ color: "#64748B", display: "block", mb: 1.5 }}>
               Employers sorted by accepted student offers
             </Typography>
 
             {analytics.recruiterRankings.length > 0 ? (
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-                {analytics.recruiterRankings.slice(0, 6).map((r, i) => (
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                {analytics.recruiterRankings.slice(0, 5).map((r, i) => (
                   <Box
                     key={i}
                     sx={{
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
-                      p: 1.2,
+                      p: 1,
                       bgcolor: "#F8FAFC",
                       border: "1px solid #F1F5F9",
                       borderRadius: "6px",
                     }}
                   >
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1.2 }}>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                       <Chip
                         label={`#${i + 1}`}
                         size="small"
                         sx={{
-                          height: 20,
-                          fontSize: "0.68rem",
+                          height: 18,
+                          fontSize: "0.65rem",
                           fontWeight: 700,
                           bgcolor: i === 0 ? "#C59B27" : "#E2E8F0",
                           color: i === 0 ? "#0B2545" : "#475569",
                           borderRadius: "3px",
                         }}
                       />
-                      <Typography variant="body2" sx={{ fontWeight: 600, color: "#0F172A" }}>
+                      <Typography variant="body2" sx={{ fontWeight: 600, color: "#0F172A", fontSize: "0.82rem" }}>
                         {r.name}
                       </Typography>
                     </Box>
@@ -377,14 +378,15 @@ function Analytics() {
                         bgcolor: "#EFF6FF",
                         color: "#1D4ED8",
                         fontWeight: 600,
-                        fontSize: "0.75rem",
+                        fontSize: "0.72rem",
+                        height: 20,
                       }}
                     />
                   </Box>
                 ))}
               </Box>
             ) : (
-              <Typography variant="body2" sx={{ color: "#64748B", py: 2, textAlign: "center" }}>
+              <Typography variant="body2" sx={{ color: "#64748B", py: 2, textAlign: "center", fontSize: "0.82rem" }}>
                 No corporate placements recorded yet.
               </Typography>
             )}
@@ -394,26 +396,26 @@ function Analytics() {
           <Paper
             elevation={0}
             sx={{
-              p: 2.5,
+              p: 2,
               border: "1px solid #E2E8F0",
               borderRadius: "8px",
               bgcolor: "#FFFFFF",
             }}
           >
-            <Typography variant="h6" sx={{ fontWeight: 600, color: "#0F172A", mb: 0.5 }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 600, color: "#0F172A", lineHeight: 1.2 }}>
               CTC Package Distribution
             </Typography>
-            <Typography variant="caption" sx={{ color: "#64748B", display: "block", mb: 2 }}>
+            <Typography variant="caption" sx={{ color: "#64748B", display: "block", mb: 1.5 }}>
               Salary tier segmentation of placed candidates
             </Typography>
 
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 1.8 }}>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
               <Box>
-                <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.6 }}>
-                  <Typography variant="caption" sx={{ fontWeight: 600, color: "#0F172A" }}>
+                <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.4 }}>
+                  <Typography variant="caption" sx={{ fontWeight: 600, color: "#0F172A", fontSize: "0.75rem" }}>
                     Marquee & Super Dream (&ge; 10 LPA)
                   </Typography>
-                  <Typography variant="caption" sx={{ fontWeight: 600, color: "#0B2545" }}>
+                  <Typography variant="caption" sx={{ fontWeight: 700, color: "#0B2545", fontSize: "0.75rem" }}>
                     {analytics.salaryTiers.high} Students
                   </Typography>
                 </Box>
@@ -425,7 +427,7 @@ function Analytics() {
                       : 0
                   }
                   sx={{
-                    height: 6,
+                    height: 5,
                     borderRadius: 3,
                     bgcolor: "#E2E8F0",
                     "& .MuiLinearProgress-bar": { bgcolor: "#C59B27", borderRadius: 3 },
@@ -434,11 +436,11 @@ function Analytics() {
               </Box>
 
               <Box>
-                <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.6 }}>
-                  <Typography variant="caption" sx={{ fontWeight: 600, color: "#0F172A" }}>
+                <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.4 }}>
+                  <Typography variant="caption" sx={{ fontWeight: 600, color: "#0F172A", fontSize: "0.75rem" }}>
                     Dream Tier (5 - 9.9 LPA)
                   </Typography>
-                  <Typography variant="caption" sx={{ fontWeight: 600, color: "#0B2545" }}>
+                  <Typography variant="caption" sx={{ fontWeight: 700, color: "#0B2545", fontSize: "0.75rem" }}>
                     {analytics.salaryTiers.mid} Students
                   </Typography>
                 </Box>
@@ -450,7 +452,7 @@ function Analytics() {
                       : 0
                   }
                   sx={{
-                    height: 6,
+                    height: 5,
                     borderRadius: 3,
                     bgcolor: "#E2E8F0",
                     "& .MuiLinearProgress-bar": { bgcolor: "#0B2545", borderRadius: 3 },
@@ -459,11 +461,11 @@ function Analytics() {
               </Box>
 
               <Box>
-                <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.6 }}>
-                  <Typography variant="caption" sx={{ fontWeight: 600, color: "#0F172A" }}>
+                <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.4 }}>
+                  <Typography variant="caption" sx={{ fontWeight: 600, color: "#0F172A", fontSize: "0.75rem" }}>
                     Core Industry Tier (&lt; 5 LPA)
                   </Typography>
-                  <Typography variant="caption" sx={{ fontWeight: 600, color: "#0B2545" }}>
+                  <Typography variant="caption" sx={{ fontWeight: 700, color: "#0B2545", fontSize: "0.75rem" }}>
                     {analytics.salaryTiers.entry} Students
                   </Typography>
                 </Box>
@@ -475,7 +477,7 @@ function Analytics() {
                       : 0
                   }
                   sx={{
-                    height: 6,
+                    height: 5,
                     borderRadius: 3,
                     bgcolor: "#E2E8F0",
                     "& .MuiLinearProgress-bar": { bgcolor: "#94A3B8", borderRadius: 3 },

@@ -108,24 +108,24 @@ function AddCompany() {
           component="form"
           onSubmit={handleSubmit}
           sx={{
-            p: { xs: 2.5, sm: 4 },
+            p: { xs: 2, sm: 3 },
             border: "1px solid #E2E8F0",
             borderRadius: "8px",
             bgcolor: "#FFFFFF",
           }}
         >
           {/* Section 1: Enterprise Profile */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1.2, mb: 2 }}>
-            <CompanyIcon sx={{ color: "#0B2545", fontSize: 22 }} />
-            <Typography variant="h6" sx={{ fontWeight: 600, color: "#0B2545" }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
+            <CompanyIcon sx={{ color: "#0B2545", fontSize: 20 }} />
+            <Typography variant="subtitle1" sx={{ fontWeight: 600, color: "#0B2545", lineHeight: 1.2 }}>
               1. Corporate Partner & Position Details
             </Typography>
           </Box>
-          <Typography variant="caption" sx={{ color: "#64748B", display: "block", mb: 3 }}>
+          <Typography variant="caption" sx={{ color: "#64748B", display: "block", mb: 2 }}>
             Identification and employment offering for on-campus recruitment
           </Typography>
 
-          <Grid container spacing={2.5}>
+          <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.6 }}>
                 Company Name *
@@ -228,20 +228,20 @@ function AddCompany() {
             </Grid>
           </Grid>
 
-          <Divider sx={{ my: 4 }} />
+          <Divider sx={{ my: 2.5 }} />
 
           {/* Section 2: Drive Logistics & Criteria */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1.2, mb: 2 }}>
-            <DriveIcon sx={{ color: "#0B2545", fontSize: 22 }} />
-            <Typography variant="h6" sx={{ fontWeight: 600, color: "#0B2545" }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
+            <DriveIcon sx={{ color: "#0B2545", fontSize: 20 }} />
+            <Typography variant="subtitle1" sx={{ fontWeight: 600, color: "#0B2545", lineHeight: 1.2 }}>
               2. Drive Schedule, Logistics & Eligibility Criteria
             </Typography>
           </Box>
-          <Typography variant="caption" sx={{ color: "#64748B", display: "block", mb: 3 }}>
+          <Typography variant="caption" sx={{ color: "#64748B", display: "block", mb: 2 }}>
             Requirements and parameters configured for participating students
           </Typography>
 
-          <Grid container spacing={2.5}>
+          <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.6 }}>
                 Minimum Eligibility CGPA

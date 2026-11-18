@@ -111,24 +111,24 @@ function AddStudent() {
           component="form"
           onSubmit={handleSubmit}
           sx={{
-            p: { xs: 2.5, sm: 4 },
+            p: { xs: 2, sm: 3 },
             border: "1px solid #E2E8F0",
             borderRadius: "8px",
             bgcolor: "#FFFFFF",
           }}
         >
           {/* Section 1: Academic & Personal Profile */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1.2, mb: 2 }}>
-            <AcademicIcon sx={{ color: "#0B2545", fontSize: 22 }} />
-            <Typography variant="h6" sx={{ fontWeight: 600, color: "#0B2545" }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
+            <AcademicIcon sx={{ color: "#0B2545", fontSize: 20 }} />
+            <Typography variant="subtitle1" sx={{ fontWeight: 600, color: "#0B2545", lineHeight: 1.2 }}>
               1. Candidate Academic & Personal Details
             </Typography>
           </Box>
-          <Typography variant="caption" sx={{ color: "#64748B", display: "block", mb: 3 }}>
+          <Typography variant="caption" sx={{ color: "#64748B", display: "block", mb: 2 }}>
             Official student records as registered in the institute administration system
           </Typography>
 
-          <Grid container spacing={2.5}>
+          <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.6 }}>
                 Full Name *
@@ -248,20 +248,20 @@ function AddStudent() {
             </Grid>
           </Grid>
 
-          <Divider sx={{ my: 4 }} />
+          <Divider sx={{ my: 2.5 }} />
 
           {/* Section 2: Placement Details */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1.2, mb: 2 }}>
-            <PlacementIcon sx={{ color: "#0B2545", fontSize: 22 }} />
-            <Typography variant="h6" sx={{ fontWeight: 600, color: "#0B2545" }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
+            <PlacementIcon sx={{ color: "#0B2545", fontSize: 20 }} />
+            <Typography variant="subtitle1" sx={{ fontWeight: 600, color: "#0B2545", lineHeight: 1.2 }}>
               2. Corporate Placement & Offer Details
             </Typography>
           </Box>
-          <Typography variant="caption" sx={{ color: "#64748B", display: "block", mb: 3 }}>
+          <Typography variant="caption" sx={{ color: "#64748B", display: "block", mb: 2 }}>
             Applicable if student has received an offer through on-campus or off-campus recruitment drive
           </Typography>
 
-          <Grid container spacing={2.5}>
+          <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.6 }}>
                 Recruiting Company Name

@@ -22,6 +22,7 @@ import {
   Tooltip,
   Avatar,
   DialogContentText,
+  Divider,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import EditIcon from "@mui/icons-material/Edit";
@@ -160,110 +161,7 @@ function StudentList() {
       title="Student Directory"
       subtitle="Comprehensive roster of registered candidates, placement status, and recruiter allocations"
     >
-      {/* Top Action Bar */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: 2,
-          mb: 3,
-        }}
-      >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-          <Chip
-            label={`${filteredStudents.length} Students Total`}
-            sx={{
-              bgcolor: "#0B2545",
-              color: "#FFFFFF",
-              fontWeight: 600,
-              fontSize: "0.78rem",
-              borderRadius: "4px",
-            }}
-          />
-        </Box>
-
-        {/* Toolbar Buttons */}
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, flexWrap: "wrap" }}>
-          <Button
-            variant="outlined"
-            size="small"
-            startIcon={<FileDownloadIcon />}
-            onClick={exportToExcel}
-            sx={{
-              borderColor: "#CBD5E1",
-              color: "#334155",
-              "&:hover": { borderColor: "#059669", color: "#059669" },
-            }}
-          >
-            Export Excel
-          </Button>
-
-          <Button
-            variant="outlined"
-            size="small"
-            startIcon={<PdfIcon />}
-            onClick={exportToPDF}
-            sx={{
-              borderColor: "#CBD5E1",
-              color: "#334155",
-              "&:hover": { borderColor: "#DC2626", color: "#DC2626" },
-            }}
-          >
-            Export PDF
-          </Button>
-
-          <Button
-            variant="contained"
-            size="small"
-            startIcon={<AddPersonIcon />}
-            onClick={() => navigate("/add-student")}
-            sx={{
-              bgcolor: "#0B2545",
-              "&:hover": { bgcolor: "#133E70" },
-            }}
-          >
-            Register Student
-          </Button>
-        </Box>
-      </Box>
-
-      {/* Filter and Search Bar */}
-      <Paper
-        elevation={0}
-        sx={{
-          p: 2,
-          mb: 3,
-          border: "1px solid #E2E8F0",
-          borderRadius: "8px",
-          bgcolor: "#FFFFFF",
-        }}
-      >
-        <TextField
-          fullWidth
-          size="small"
-          placeholder="Filter students by Name, Roll No, Branch, or Company..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon sx={{ color: "#94A3B8", fontSize: 20 }} />
-              </InputAdornment>
-            ),
-            endAdornment: search ? (
-              <InputAdornment position="end">
-                <IconButton size="small" onClick={() => setSearch("")}>
-                  <CloseIcon fontSize="small" />
-                </IconButton>
-              </InputAdornment>
-            ) : null,
-          }}
-        />
-      </Paper>
-
-      {/* Student Data Table */}
+      {/* Unified Enterprise Table Card */}
       <Paper
         elevation={0}
         sx={{
@@ -273,7 +171,123 @@ function StudentList() {
           overflow: "hidden",
         }}
       >
-        <TableContainer sx={{ maxHeight: "calc(100vh - 340px)" }}>
+        {/* Table Toolbar Header (All controls integrated tightly) */}
+        <Box
+          sx={{
+            p: 2,
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            alignItems: { xs: "stretch", md: "center" },
+            justifyContent: "space-between",
+            gap: 2,
+          }}
+        >
+          {/* Left: Title, Counter & Search */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, flex: 1, flexWrap: "wrap" }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 600, color: "#0F172A", lineHeight: 1.2 }}>
+                Students
+              </Typography>
+              <Chip
+                label={`${filteredStudents.length} Records`}
+                size="small"
+                sx={{
+                  bgcolor: "#0B2545",
+                  color: "#FFFFFF",
+                  fontWeight: 600,
+                  fontSize: "0.72rem",
+                  height: 22,
+                  borderRadius: "4px",
+                }}
+              />
+            </Box>
+
+            <TextField
+              size="small"
+              placeholder="Search name, roll no, branch, company..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              sx={{
+                width: { xs: "100%", sm: 320 },
+                "& .MuiOutlinedInput-root": {
+                  height: 36,
+                  fontSize: "0.82rem",
+                  bgcolor: "#F8FAFC",
+                },
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon sx={{ color: "#94A3B8", fontSize: 18 }} />
+                  </InputAdornment>
+                ),
+                endAdornment: search ? (
+                  <InputAdornment position="end">
+                    <IconButton size="small" onClick={() => setSearch("")}>
+                      <CloseIcon fontSize="small" />
+                    </IconButton>
+                  </InputAdornment>
+                ) : null,
+              }}
+            />
+          </Box>
+
+          {/* Right: Actions (Export and Register) */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<FileDownloadIcon fontSize="small" />}
+              onClick={exportToExcel}
+              sx={{
+                borderColor: "#CBD5E1",
+                color: "#334155",
+                fontSize: "0.78rem",
+                height: 34,
+                "&:hover": { borderColor: "#059669", color: "#059669" },
+              }}
+            >
+              Excel
+            </Button>
+
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<PdfIcon fontSize="small" />}
+              onClick={exportToPDF}
+              sx={{
+                borderColor: "#CBD5E1",
+                color: "#334155",
+                fontSize: "0.78rem",
+                height: 34,
+                "&:hover": { borderColor: "#DC2626", color: "#DC2626" },
+              }}
+            >
+              PDF
+            </Button>
+
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={<AddPersonIcon fontSize="small" />}
+              onClick={() => navigate("/add-student")}
+              sx={{
+                bgcolor: "#0B2545",
+                fontSize: "0.78rem",
+                height: 34,
+                "&:hover": { bgcolor: "#133E70" },
+                px: 2,
+              }}
+            >
+              Register Student
+            </Button>
+          </Box>
+        </Box>
+
+        <Divider />
+
+        {/* Student Data Table */}
+        <TableContainer sx={{ maxHeight: "calc(100vh - 270px)" }}>
           <Table stickyHeader size="small">
             <TableHead>
               <TableRow>
@@ -296,11 +310,11 @@ function StudentList() {
                       <Box sx={{ display: "flex", alignItems: "center", gap: 1.2 }}>
                         <Avatar
                           sx={{
-                            width: 30,
-                            height: 30,
+                            width: 28,
+                            height: 28,
                             bgcolor: "#0B2545",
                             color: "#FFFFFF",
-                            fontSize: "0.75rem",
+                            fontSize: "0.72rem",
                             fontWeight: 600,
                           }}
                         >
@@ -312,7 +326,8 @@ function StudentList() {
                               color: "#0B2545",
                               cursor: "pointer",
                               fontWeight: 600,
-                              fontSize: "0.875rem",
+                              fontSize: "0.82rem",
+                              lineHeight: 1.2,
                               "&:hover": { textDecoration: "underline" },
                             }}
                             onClick={() => navigate(`/student-profile/${student.id}`)}
@@ -320,7 +335,7 @@ function StudentList() {
                             {student.name}
                           </Typography>
                           {student.email && (
-                            <Typography variant="caption" sx={{ color: "#64748B", display: "block" }}>
+                            <Typography variant="caption" sx={{ color: "#64748B", display: "block", fontSize: "0.7rem" }}>
                               {student.email}
                             </Typography>
                           )}
@@ -329,25 +344,25 @@ function StudentList() {
                     </TableCell>
 
                     <TableCell>
-                      <Typography variant="body2" sx={{ fontFamily: "monospace", fontWeight: 600 }}>
+                      <Typography variant="body2" sx={{ fontFamily: "monospace", fontWeight: 600, fontSize: "0.78rem" }}>
                         {student.rollNo || "—"}
                       </Typography>
                     </TableCell>
 
                     <TableCell>
-                      <Typography variant="body2" sx={{ color: "#334155" }}>
+                      <Typography variant="body2" sx={{ color: "#334155", fontSize: "0.78rem" }}>
                         {student.branch || "—"}
                       </Typography>
                     </TableCell>
 
                     <TableCell>
-                      <Typography variant="body2" sx={{ color: "#64748B" }}>
+                      <Typography variant="body2" sx={{ color: "#64748B", fontSize: "0.78rem" }}>
                         {student.phone || "—"}
                       </Typography>
                     </TableCell>
 
                     <TableCell>
-                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                      <Typography variant="body2" sx={{ fontWeight: 500, fontSize: "0.8rem" }}>
                         {student.companyName || "—"}
                       </Typography>
                     </TableCell>
@@ -360,12 +375,13 @@ function StudentList() {
                           sx={{
                             bgcolor: "#F1F5F9",
                             fontWeight: 600,
-                            fontSize: "0.75rem",
+                            fontSize: "0.72rem",
+                            height: 20,
                             borderRadius: "4px",
                           }}
                         />
                       ) : (
-                        <Typography variant="body2" sx={{ color: "#94A3B8" }}>
+                        <Typography variant="body2" sx={{ color: "#94A3B8", fontSize: "0.75rem" }}>
                           —
                         </Typography>
                       )}
@@ -374,7 +390,7 @@ function StudentList() {
                     <TableCell>
                       {student.status === "Placed" ? (
                         <Chip
-                          icon={<PlacedIcon sx={{ fontSize: "14px !important", color: "#059669 !important" }} />}
+                          icon={<PlacedIcon sx={{ fontSize: "13px !important", color: "#059669 !important" }} />}
                           label="Placed"
                           size="small"
                           sx={{
@@ -382,13 +398,14 @@ function StudentList() {
                             color: "#059669",
                             border: "1px solid #A7F3D0",
                             fontWeight: 600,
-                            fontSize: "0.75rem",
+                            fontSize: "0.7rem",
+                            height: 20,
                             borderRadius: "4px",
                           }}
                         />
                       ) : (
                         <Chip
-                          icon={<NotPlacedIcon sx={{ fontSize: "14px !important", color: "#64748B !important" }} />}
+                          icon={<NotPlacedIcon sx={{ fontSize: "13px !important", color: "#64748B !important" }} />}
                           label="Not Placed"
                           size="small"
                           sx={{
@@ -396,7 +413,8 @@ function StudentList() {
                             color: "#64748B",
                             border: "1px solid #E2E8F0",
                             fontWeight: 500,
-                            fontSize: "0.75rem",
+                            fontSize: "0.7rem",
+                            height: 20,
                             borderRadius: "4px",
                           }}
                         />
@@ -411,10 +429,11 @@ function StudentList() {
                             onClick={() => handleEdit(student)}
                             sx={{
                               color: "#475569",
+                              p: 0.5,
                               "&:hover": { color: "#0B2545", bgcolor: "#F1F5F9" },
                             }}
                           >
-                            <EditIcon fontSize="small" />
+                            <EditIcon sx={{ fontSize: 18 }} />
                           </IconButton>
                         </Tooltip>
 
@@ -427,10 +446,11 @@ function StudentList() {
                             }}
                             sx={{
                               color: "#94A3B8",
+                              p: 0.5,
                               "&:hover": { color: "#DC2626", bgcolor: "#FEF2F2" },
                             }}
                           >
-                            <DeleteIcon fontSize="small" />
+                            <DeleteIcon sx={{ fontSize: 18 }} />
                           </IconButton>
                         </Tooltip>
                       </Box>
@@ -439,8 +459,8 @@ function StudentList() {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={8} align="center" sx={{ py: 6 }}>
-                    <Typography variant="body1" sx={{ color: "#64748B", fontWeight: 500 }}>
+                  <TableCell colSpan={8} align="center" sx={{ py: 5 }}>
+                    <Typography variant="body1" sx={{ color: "#64748B", fontWeight: 500, fontSize: "0.85rem" }}>
                       No student records found matching "{search}"
                     </Typography>
                     <Typography variant="caption" sx={{ color: "#94A3B8", display: "block", mt: 0.5 }}>
@@ -462,7 +482,7 @@ function StudentList() {
         maxWidth="sm"
       >
         <DialogTitle>
-          <Typography variant="h6" sx={{ fontWeight: 600, color: "#0F172A" }}>
+          <Typography variant="h6" sx={{ fontWeight: 600, color: "#0F172A", fontSize: "1rem" }}>
             Edit Student Details
           </Typography>
           <Typography variant="caption" sx={{ color: "#64748B" }}>
@@ -470,11 +490,11 @@ function StudentList() {
           </Typography>
         </DialogTitle>
 
-        <DialogContent sx={{ pt: 2.5 }}>
+        <DialogContent sx={{ pt: 2 }}>
           {selectedStudent && (
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 1.8, mt: 0.5 }}>
               <Box>
-                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.4 }}>
                   Candidate Full Name
                 </Typography>
                 <TextField
@@ -491,7 +511,7 @@ function StudentList() {
               </Box>
 
               <Box>
-                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.4 }}>
                   Company Name
                 </Typography>
                 <TextField
@@ -509,7 +529,7 @@ function StudentList() {
               </Box>
 
               <Box>
-                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.4 }}>
                   Annual Package (LPA)
                 </Typography>
                 <TextField
@@ -527,7 +547,7 @@ function StudentList() {
               </Box>
 
               <Box>
-                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.4 }}>
                   Placement Status
                 </Typography>
                 <TextField
@@ -550,16 +570,18 @@ function StudentList() {
           )}
         </DialogContent>
 
-        <DialogActions>
-          <Button onClick={() => setOpen(false)} sx={{ color: "#64748B" }}>
+        <DialogActions sx={{ p: 1.5 }}>
+          <Button onClick={() => setOpen(false)} sx={{ color: "#64748B", fontSize: "0.8rem" }}>
             Cancel
           </Button>
           <Button
             variant="contained"
+            size="small"
             onClick={updateStudent}
             sx={{
               bgcolor: "#0B2545",
               "&:hover": { bgcolor: "#133E70" },
+              fontSize: "0.8rem",
             }}
           >
             Save Changes
@@ -574,21 +596,23 @@ function StudentList() {
         maxWidth="xs"
         fullWidth
       >
-        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogTitle sx={{ fontSize: "1rem" }}>Confirm Deletion</DialogTitle>
         <DialogContent>
-          <DialogContentText sx={{ color: "#475569", fontSize: "0.875rem" }}>
+          <DialogContentText sx={{ color: "#475569", fontSize: "0.85rem" }}>
             Are you sure you want to permanently delete candidate record for{" "}
             <b>{studentToDelete?.name}</b> (Roll No: {studentToDelete?.rollNo})? This action cannot be undone.
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDeleteConfirmOpen(false)} sx={{ color: "#64748B" }}>
+        <DialogActions sx={{ p: 1.5 }}>
+          <Button onClick={() => setDeleteConfirmOpen(false)} sx={{ color: "#64748B", fontSize: "0.8rem" }}>
             Cancel
           </Button>
           <Button
             variant="contained"
+            size="small"
             color="error"
             onClick={() => deleteStudent(studentToDelete?.id)}
+            sx={{ fontSize: "0.8rem" }}
           >
             Delete Record
           </Button>

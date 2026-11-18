@@ -1,3 +1,15 @@
 node_modules/
 .env
+.env.*
+!.env.example
 firebase_key.json
+service-account*.json
+*serviceAccount*.json
+secrets/
+__pycache__/
+*.py[cod]
+venv/
+*.pem
+*.key
+*.p12
+*.pfx

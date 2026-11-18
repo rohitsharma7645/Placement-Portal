@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   Box,
   Typography,
@@ -8,10 +8,7 @@ import {
   Chip,
   Tabs,
   Tab,
-  Avatar,
-  Divider,
 } from "@mui/material";
-import NotificationsIcon from "@mui/icons-material/NotificationsOutlined";
 import DriveIcon from "@mui/icons-material/EventAvailableOutlined";
 import InternshipIcon from "@mui/icons-material/WorkHistoryOutlined";
 import TimerIcon from "@mui/icons-material/HourglassEmptyOutlined";
@@ -25,40 +22,7 @@ function Notifications() {
   const [notifications, setNotifications] = useState([]);
   const [filterType, setFilterType] = useState("ALL");
 
-  const fetchStudents = async () => {
-    try {
-      const response = await api.get("/students");
-      const data = Array.isArray(response.data)
-        ? response.data
-        : Object.values(response.data || {});
-      setStudents(data);
-    } catch (error) {
-      console.error("Fetch Students Error:", error);
-    }
-  };
-
-  const fetchCompanies = async () => {
-    try {
-      const response = await api.get("/companies");
-      const data = Array.isArray(response.data)
-        ? response.data
-        : Object.values(response.data || {});
-      setCompanies(data);
-    } catch (error) {
-      console.error("Fetch Companies Error:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchStudents();
-    fetchCompanies();
-  }, []);
-
-  useEffect(() => {
-    generateNotifications();
-  }, [students, companies]);
-
-  const generateNotifications = () => {
+  const generateNotifications = useCallback(() => {
     const today = new Date();
     const generated = [];
 
@@ -127,7 +91,35 @@ function Notifications() {
     });
 
     setNotifications(generated);
-  };
+  }, [students, companies]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [studentsRes, companiesRes] = await Promise.all([
+          api.get("/students"),
+          api.get("/companies"),
+        ]);
+        setStudents(
+          Array.isArray(studentsRes.data)
+            ? studentsRes.data
+            : Object.values(studentsRes.data || {})
+        );
+        setCompanies(
+          Array.isArray(companiesRes.data)
+            ? companiesRes.data
+            : Object.values(companiesRes.data || {})
+        );
+      } catch (error) {
+        console.error("Fetch Data Error:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    generateNotifications();
+  }, [generateNotifications]);
 
   const filteredNotifications = notifications.filter((item) => {
     if (filterType === "ALL") return true;

@@ -21,6 +21,7 @@ import {
   Chip,
   Tooltip,
   DialogContentText,
+  Divider,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import AddBusinessIcon from "@mui/icons-material/AddBusinessOutlined";
@@ -99,79 +100,7 @@ function CompanyList() {
       title="Corporate Recruiter Directory"
       subtitle="Recruiting partner companies, campus drive schedules, criteria, and hiring formats"
     >
-      {/* Top Action Bar */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: 2,
-          mb: 3,
-        }}
-      >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-          <Chip
-            label={`${filteredCompanies.length} Recruiters Registered`}
-            sx={{
-              bgcolor: "#0B2545",
-              color: "#FFFFFF",
-              fontWeight: 600,
-              fontSize: "0.78rem",
-              borderRadius: "4px",
-            }}
-          />
-        </Box>
-
-        <Button
-          variant="contained"
-          size="small"
-          startIcon={<AddBusinessIcon />}
-          onClick={() => navigate("/companies")}
-          sx={{
-            bgcolor: "#0B2545",
-            "&:hover": { bgcolor: "#133E70" },
-          }}
-        >
-          Add New Recruiter
-        </Button>
-      </Box>
-
-      {/* Filter and Search Bar */}
-      <Paper
-        elevation={0}
-        sx={{
-          p: 2,
-          mb: 3,
-          border: "1px solid #E2E8F0",
-          borderRadius: "8px",
-          bgcolor: "#FFFFFF",
-        }}
-      >
-        <TextField
-          fullWidth
-          size="small"
-          placeholder="Filter recruiters by Company Name, Role, Category, or Location..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon sx={{ color: "#94A3B8", fontSize: 20 }} />
-              </InputAdornment>
-            ),
-            endAdornment: search ? (
-              <InputAdornment position="end">
-                <IconButton size="small" onClick={() => setSearch("")}>
-                  <CloseIcon fontSize="small" />
-                </IconButton>
-              </InputAdornment>
-            ) : null,
-          }}
-        />
-      </Paper>
-
-      {/* Recruiter Table */}
+      {/* Unified Enterprise Table Card */}
       <Paper
         elevation={0}
         sx={{
@@ -181,7 +110,91 @@ function CompanyList() {
           overflow: "hidden",
         }}
       >
-        <TableContainer sx={{ maxHeight: "calc(100vh - 340px)", overflowX: "auto" }}>
+        {/* Table Toolbar Header */}
+        <Box
+          sx={{
+            p: 2,
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            alignItems: { xs: "stretch", md: "center" },
+            justifyContent: "space-between",
+            gap: 2,
+          }}
+        >
+          {/* Left: Title, Counter & Search */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, flex: 1, flexWrap: "wrap" }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 600, color: "#0F172A", lineHeight: 1.2 }}>
+                Recruiters
+              </Typography>
+              <Chip
+                label={`${filteredCompanies.length} Registered`}
+                size="small"
+                sx={{
+                  bgcolor: "#0B2545",
+                  color: "#FFFFFF",
+                  fontWeight: 600,
+                  fontSize: "0.72rem",
+                  height: 22,
+                  borderRadius: "4px",
+                }}
+              />
+            </Box>
+
+            <TextField
+              size="small"
+              placeholder="Search company, role, category, location..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              sx={{
+                width: { xs: "100%", sm: 340 },
+                "& .MuiOutlinedInput-root": {
+                  height: 36,
+                  fontSize: "0.82rem",
+                  bgcolor: "#F8FAFC",
+                },
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon sx={{ color: "#94A3B8", fontSize: 18 }} />
+                  </InputAdornment>
+                ),
+                endAdornment: search ? (
+                  <InputAdornment position="end">
+                    <IconButton size="small" onClick={() => setSearch("")}>
+                      <CloseIcon fontSize="small" />
+                    </IconButton>
+                  </InputAdornment>
+                ) : null,
+              }}
+            />
+          </Box>
+
+          {/* Right: Action */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={<AddBusinessIcon fontSize="small" />}
+              onClick={() => navigate("/companies")}
+              sx={{
+                bgcolor: "#0B2545",
+                fontSize: "0.78rem",
+                height: 34,
+                "&:hover": { bgcolor: "#133E70" },
+                px: 2,
+              }}
+            >
+              Add New Recruiter
+            </Button>
+          </Box>
+        </Box>
+
+        <Divider />
+
+        {/* Recruiter Table */}
+        <TableContainer sx={{ maxHeight: "calc(100vh - 270px)", overflowX: "auto" }}>
           <Table stickyHeader size="small" sx={{ minWidth: 960 }}>
             <TableHead>
               <TableRow>
@@ -204,7 +217,7 @@ function CompanyList() {
                 filteredCompanies.map((company) => (
                   <TableRow key={company.id} hover>
                     <TableCell>
-                      <Typography variant="subtitle2" sx={{ fontWeight: 600, color: "#0B2545" }}>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 600, color: "#0B2545", fontSize: "0.85rem" }}>
                         {company.companyName}
                       </Typography>
                     </TableCell>
@@ -217,7 +230,8 @@ function CompanyList() {
                           bgcolor: "#F1F5F9",
                           color: "#334155",
                           fontWeight: 500,
-                          fontSize: "0.72rem",
+                          fontSize: "0.7rem",
+                          height: 20,
                           borderRadius: "4px",
                         }}
                       />
@@ -232,28 +246,29 @@ function CompanyList() {
                           color: "#92400E",
                           border: "1px solid #FDE68A",
                           fontWeight: 700,
-                          fontSize: "0.75rem",
+                          fontSize: "0.72rem",
+                          height: 20,
                           borderRadius: "4px",
                         }}
                       />
                     </TableCell>
 
                     <TableCell>
-                      <Typography variant="body2" sx={{ fontWeight: 500, color: "#0F172A" }}>
+                      <Typography variant="body2" sx={{ fontWeight: 500, color: "#0F172A", fontSize: "0.8rem" }}>
                         {company.role || "—"}
                       </Typography>
                     </TableCell>
 
                     <TableCell>
-                      <Typography variant="body2" sx={{ fontWeight: 600, color: "#475569" }}>
+                      <Typography variant="body2" sx={{ fontWeight: 600, color: "#475569", fontSize: "0.78rem" }}>
                         {company.minimumCGPA ? `${company.minimumCGPA} CGPA` : "None"}
                       </Typography>
                     </TableCell>
 
                     <TableCell>
                       <Box sx={{ display: "flex", alignItems: "center", gap: 0.6 }}>
-                        <CalendarIcon sx={{ fontSize: 14, color: "#64748B" }} />
-                        <Typography variant="body2" sx={{ fontSize: "0.8rem", color: "#334155" }}>
+                        <CalendarIcon sx={{ fontSize: 13, color: "#64748B" }} />
+                        <Typography variant="body2" sx={{ fontSize: "0.78rem", color: "#334155" }}>
                           {company.driveDate || "TBA"}
                         </Typography>
                       </Box>
@@ -261,21 +276,21 @@ function CompanyList() {
 
                     <TableCell>
                       <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                        <LocationIcon sx={{ fontSize: 14, color: "#94A3B8" }} />
-                        <Typography variant="body2" sx={{ color: "#475569", fontSize: "0.8rem" }}>
+                        <LocationIcon sx={{ fontSize: 13, color: "#94A3B8" }} />
+                        <Typography variant="body2" sx={{ color: "#475569", fontSize: "0.78rem" }}>
                           {company.location || "On Campus"}
                         </Typography>
                       </Box>
                     </TableCell>
 
                     <TableCell>
-                      <Typography variant="caption" sx={{ color: "#475569", fontWeight: 500 }}>
+                      <Typography variant="caption" sx={{ color: "#475569", fontWeight: 500, fontSize: "0.72rem" }}>
                         {company.allowedBranches || "All Branches"}
                       </Typography>
                     </TableCell>
 
                     <TableCell>
-                      <Typography variant="caption" sx={{ color: "#334155" }}>
+                      <Typography variant="caption" sx={{ color: "#334155", fontSize: "0.72rem" }}>
                         {company.selectionProcess || "Direct Interview"}
                       </Typography>
                     </TableCell>
@@ -290,7 +305,8 @@ function CompanyList() {
                             color: "#059669",
                             border: "1px solid #A7F3D0",
                             fontWeight: 600,
-                            fontSize: "0.72rem",
+                            fontSize: "0.7rem",
+                            height: 20,
                             borderRadius: "4px",
                           }}
                         />
@@ -303,7 +319,8 @@ function CompanyList() {
                             color: "#1D4ED8",
                             border: "1px solid #BFDBFE",
                             fontWeight: 600,
-                            fontSize: "0.72rem",
+                            fontSize: "0.7rem",
+                            height: 20,
                             borderRadius: "4px",
                           }}
                         />
@@ -318,10 +335,11 @@ function CompanyList() {
                             onClick={() => handleEdit(company)}
                             sx={{
                               color: "#475569",
+                              p: 0.5,
                               "&:hover": { color: "#0B2545", bgcolor: "#F1F5F9" },
                             }}
                           >
-                            <EditIcon fontSize="small" />
+                            <EditIcon sx={{ fontSize: 18 }} />
                           </IconButton>
                         </Tooltip>
 
@@ -334,10 +352,11 @@ function CompanyList() {
                             }}
                             sx={{
                               color: "#94A3B8",
+                              p: 0.5,
                               "&:hover": { color: "#DC2626", bgcolor: "#FEF2F2" },
                             }}
                           >
-                            <DeleteIcon fontSize="small" />
+                            <DeleteIcon sx={{ fontSize: 18 }} />
                           </IconButton>
                         </Tooltip>
                       </Box>
@@ -346,8 +365,8 @@ function CompanyList() {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={11} align="center" sx={{ py: 6 }}>
-                    <Typography variant="body1" sx={{ color: "#64748B", fontWeight: 500 }}>
+                  <TableCell colSpan={11} align="center" sx={{ py: 5 }}>
+                    <Typography variant="body1" sx={{ color: "#64748B", fontWeight: 500, fontSize: "0.85rem" }}>
                       No recruiter records found matching "{search}"
                     </Typography>
                     <Typography variant="caption" sx={{ color: "#94A3B8", display: "block", mt: 0.5 }}>
@@ -369,7 +388,7 @@ function CompanyList() {
         maxWidth="md"
       >
         <DialogTitle>
-          <Typography variant="h6" sx={{ fontWeight: 600, color: "#0F172A" }}>
+          <Typography variant="h6" sx={{ fontWeight: 600, color: "#0F172A", fontSize: "1rem" }}>
             Edit Corporate Recruiter Details
           </Typography>
           <Typography variant="caption" sx={{ color: "#64748B" }}>
@@ -377,11 +396,11 @@ function CompanyList() {
           </Typography>
         </DialogTitle>
 
-        <DialogContent sx={{ pt: 2.5 }}>
+        <DialogContent sx={{ pt: 2 }}>
           {selectedCompany && (
-            <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" }, gap: 2, mt: 1 }}>
+            <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" }, gap: 1.8, mt: 0.5 }}>
               <Box>
-                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.4 }}>
                   Company Name
                 </Typography>
                 <TextField
@@ -398,7 +417,7 @@ function CompanyList() {
               </Box>
 
               <Box>
-                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.4 }}>
                   Annual Package (LPA)
                 </Typography>
                 <TextField
@@ -415,7 +434,7 @@ function CompanyList() {
               </Box>
 
               <Box>
-                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.4 }}>
                   Designated Job Role
                 </Typography>
                 <TextField
@@ -432,7 +451,7 @@ function CompanyList() {
               </Box>
 
               <Box>
-                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.4 }}>
                   Minimum Cutoff CGPA
                 </Typography>
                 <TextField
@@ -449,7 +468,7 @@ function CompanyList() {
               </Box>
 
               <Box>
-                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.4 }}>
                   Job / Drive Location
                 </Typography>
                 <TextField
@@ -466,7 +485,7 @@ function CompanyList() {
               </Box>
 
               <Box>
-                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.4 }}>
                   Allowed Branches
                 </Typography>
                 <TextField
@@ -483,7 +502,7 @@ function CompanyList() {
               </Box>
 
               <Box>
-                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.4 }}>
                   Selection Process
                 </Typography>
                 <TextField
@@ -506,7 +525,7 @@ function CompanyList() {
               </Box>
 
               <Box>
-                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 600, color: "#334155", display: "block", mb: 0.4 }}>
                   Drive Status
                 </Typography>
                 <TextField
@@ -529,16 +548,18 @@ function CompanyList() {
           )}
         </DialogContent>
 
-        <DialogActions>
-          <Button onClick={() => setOpen(false)} sx={{ color: "#64748B" }}>
+        <DialogActions sx={{ p: 1.5 }}>
+          <Button onClick={() => setOpen(false)} sx={{ color: "#64748B", fontSize: "0.8rem" }}>
             Cancel
           </Button>
           <Button
             variant="contained"
+            size="small"
             onClick={updateCompany}
             sx={{
               bgcolor: "#0B2545",
               "&:hover": { bgcolor: "#133E70" },
+              fontSize: "0.8rem",
             }}
           >
             Update Recruiter
@@ -553,21 +574,23 @@ function CompanyList() {
         maxWidth="xs"
         fullWidth
       >
-        <DialogTitle>Confirm Recruiter Deletion</DialogTitle>
+        <DialogTitle sx={{ fontSize: "1rem" }}>Confirm Recruiter Deletion</DialogTitle>
         <DialogContent>
-          <DialogContentText sx={{ color: "#475569", fontSize: "0.875rem" }}>
+          <DialogContentText sx={{ color: "#475569", fontSize: "0.85rem" }}>
             Are you sure you want to permanently delete recruiter record for{" "}
             <b>{companyToDelete?.companyName}</b>? This will remove associated drive listings.
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDeleteConfirmOpen(false)} sx={{ color: "#64748B" }}>
+        <DialogActions sx={{ p: 1.5 }}>
+          <Button onClick={() => setDeleteConfirmOpen(false)} sx={{ color: "#64748B", fontSize: "0.8rem" }}>
             Cancel
           </Button>
           <Button
             variant="contained"
+            size="small"
             color="error"
             onClick={() => deleteCompany(companyToDelete?.id)}
+            sx={{ fontSize: "0.8rem" }}
           >
             Delete Recruiter
           </Button>
